@@ -27,6 +27,7 @@ public class MovieController {
 
     @GetMapping("/movies/{id}")
     public MovieResponse retrieve(@PathVariable Long id) {
-        return MovieResponse.builder().build();
+        Movie movie = movieService.retrieve(id);
+        return MovieResponse.convertFrom(movie);
     }
 }
