@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.CollectionUtils;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -31,7 +32,9 @@ public class MovieRequest {
     @NotNull
     private String director;
 
+    @Valid
     private List<ActorCreateRequest> actors;
+
     private List<Long> actorIds;
 
     public Movie convertToMovie() {

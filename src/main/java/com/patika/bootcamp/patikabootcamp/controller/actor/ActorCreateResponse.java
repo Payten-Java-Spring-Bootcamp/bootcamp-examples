@@ -1,12 +1,12 @@
 package com.patika.bootcamp.patikabootcamp.controller.actor;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Builder
-@Getter
 @Setter
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ActorCreateResponse {
 
     private Long id;

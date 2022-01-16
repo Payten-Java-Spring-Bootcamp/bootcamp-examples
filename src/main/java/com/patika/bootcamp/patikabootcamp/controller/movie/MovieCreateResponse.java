@@ -1,10 +1,12 @@
 package com.patika.bootcamp.patikabootcamp.controller.movie;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MovieCreateResponse {
 
     private Long id;

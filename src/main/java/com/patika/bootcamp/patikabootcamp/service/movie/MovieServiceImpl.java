@@ -10,6 +10,7 @@ import com.patika.bootcamp.patikabootcamp.service.actor.Actor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class MovieServiceImpl implements MovieService {
     private final RedisTemplate<String, Movie> movieRedisTemplate;
 
     @Override
+    @Transactional
     public Long create(Movie movie, List<Actor> actors, List<Long> actorIds) {
         List<ActorEntity> existingActors = retrieveExistingActors(actorIds);
         List<ActorEntity> createdActors = createActors(actors);
