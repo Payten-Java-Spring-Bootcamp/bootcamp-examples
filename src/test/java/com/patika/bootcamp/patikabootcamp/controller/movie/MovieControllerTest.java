@@ -83,4 +83,28 @@ class MovieControllerTest extends BaseIntegrationTest {
         List<MatchingEntity> matchings = matchingJpaRepository.findAll();
         assertThat(matchings).hasSize(5);
     }
+
+    @Test
+    @Sql(scripts = "/movie-create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void should_retrieve_movie() {
+        //when
+        ResponseEntity<MovieResponse> response = testRestTemplate.getForEntity("/movies/1001", MovieResponse.class);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+
+        assertThat(response.getBody())
+                .extracting("name", "genre", "releaseYear", "director")
+                .containsExactly("test film 1001", MovieGenre.COMEDY, 2001, "test yönetmen 1001");
+
+        assertThat(response.getBody().getActors())
+                .hasSize(2)
+                .extracting("id", "name", "birthDate")
+                .containsExactly(
+                        tuple(2001L, "test actor 2001", LocalDateTime.of(2001, 1, 12, 11, 0, 0)),
+                        tuple(2003L, "test actor 2003", LocalDateTime.of(2003, 1, 12, 13, 0, 0))
+                );
+    }
 }

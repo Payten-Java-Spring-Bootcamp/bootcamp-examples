@@ -1,6 +1,7 @@
 package com.patika.bootcamp.patikabootcamp.controller.movie;
 
 import com.patika.bootcamp.patikabootcamp.service.actor.Actor;
+import com.patika.bootcamp.patikabootcamp.service.actor.ActorService;
 import com.patika.bootcamp.patikabootcamp.service.movie.Movie;
 import com.patika.bootcamp.patikabootcamp.service.movie.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService movieService;
+    private final ActorService actorService;
 
     @PostMapping("/movies")
     @ResponseStatus(HttpStatus.CREATED)
@@ -29,6 +31,7 @@ public class MovieController {
     @GetMapping("/movies/{id}")
     public MovieResponse retrieve(@PathVariable Long id) {
         Movie movie = movieService.retrieve(id);
-        return MovieResponse.convertFrom(movie);
+        List<Actor> actors = actorService.retrieveActors(id);
+        return MovieResponse.convertFrom(movie, actors);
     }
 }

@@ -9,4 +9,6 @@ public interface ActorService {
     Long create(Actor actor);
 
     List<Movie> retrieveMovies(Long actor);
+
+    List<Actor> retrieveActors(Long movieId);
 }

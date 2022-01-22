@@ -8,7 +8,7 @@ import com.patika.bootcamp.patikabootcamp.repository.movie.MovieDao;
 import com.patika.bootcamp.patikabootcamp.repository.movie.MovieEntity;
 import com.patika.bootcamp.patikabootcamp.service.actor.Actor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j //todo log levels
 @Service
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
@@ -24,7 +25,6 @@ public class MovieServiceImpl implements MovieService {
     private final MovieDao movieDao;
     private final ActorDao actorDao;
     private final MatchingDao matchingDao;
-    private final RedisTemplate<String, Movie> movieRedisTemplate;
 
     @Override
     @Transactional
@@ -40,8 +40,8 @@ public class MovieServiceImpl implements MovieService {
         List<MatchingEntity> matchingEntities = actorEntities.stream()
                 .map(actorEntity -> {
                     MatchingEntity matchingEntity = new MatchingEntity();
-                    matchingEntity.setMovieEntity(createdMovie);
-                    matchingEntity.setActorEntity(actorEntity);
+                    matchingEntity.setMovie(createdMovie);
+                    matchingEntity.setActor(actorEntity);
                     return matchingEntity;
                 }).collect(Collectors.toList());
 
@@ -96,6 +96,4 @@ public class MovieServiceImpl implements MovieService {
         MovieEntity entity = movieDao.retrieve(id);
         return Movie.convertFrom(entity);
     }
-
-
 }

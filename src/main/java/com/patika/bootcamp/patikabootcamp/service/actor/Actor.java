@@ -21,4 +21,12 @@ public class Actor implements Serializable {
         entity.setBirthDate(birthDate);
         return entity;
     }
+
+    public static Actor convertFrom(ActorEntity entity) {
+        return Actor.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .birthDate(entity.getBirthDate())
+                .build();
+    }
 }

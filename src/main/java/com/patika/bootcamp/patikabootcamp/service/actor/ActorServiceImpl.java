@@ -2,6 +2,7 @@ package com.patika.bootcamp.patikabootcamp.service.actor;
 
 import com.patika.bootcamp.patikabootcamp.repository.actor.ActorDao;
 import com.patika.bootcamp.patikabootcamp.repository.actor.ActorEntity;
+import com.patika.bootcamp.patikabootcamp.repository.matching.MatchingDao;
 import com.patika.bootcamp.patikabootcamp.repository.movie.MovieDao;
 import com.patika.bootcamp.patikabootcamp.service.movie.Movie;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class ActorServiceImpl implements ActorService {
 
     private final ActorDao actorDao;
     private final MovieDao movieDao;
+    private final MatchingDao matchingDao;
     private final RedisTemplate<String, Actor> actorRedisTemplate;
 
     @Override
@@ -32,5 +34,13 @@ public class ActorServiceImpl implements ActorService {
                 .stream()
                 .map(Movie::convertFrom)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Actor> retrieveActors(Long movieId) {
+        return matchingDao.retrieveActorsByMovieId(movieId)
+                .stream()
+                .map(Actor::convertFrom)
+                .toList();
     }
 }

@@ -40,7 +40,7 @@ public class MovieDaoImpl implements MovieDao {
             return actorEntityOptional.get()
                     .getMatchings()
                     .stream()
-                    .map(MatchingEntity::getMovieEntity)
+                    .map(MatchingEntity::getMovie)
                     .collect(Collectors.toList());
         else
             throw new RuntimeException();
