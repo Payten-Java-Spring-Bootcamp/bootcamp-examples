@@ -1,5 +1,6 @@
 package com.patika.bootcamp.patikabootcamp.repository.movie;
 
+import com.patika.bootcamp.patikabootcamp.repository.Status;
 import com.patika.bootcamp.patikabootcamp.repository.actor.ActorEntity;
 import com.patika.bootcamp.patikabootcamp.repository.actor.ActorJpaRepository;
 import com.patika.bootcamp.patikabootcamp.repository.matching.MatchingEntity;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +41,19 @@ public class MovieDaoImpl implements MovieDao {
                     .getMatchings()
                     .stream()
                     .map(MatchingEntity::getMovie)
-                    .collect(Collectors.toList());
+                    .toList();
         else
             throw new RuntimeException();
+    }
+
+    @Override
+    public void delete(Long id) {
+        Optional<MovieEntity> optionalMovieEntity = movieJpaRepository.findById(id);
+
+        if(optionalMovieEntity.isPresent()) {
+            MovieEntity entity = optionalMovieEntity.get();
+            entity.setStatus(Status.DELETED);
+            movieJpaRepository.save(entity);
+        }
     }
 }

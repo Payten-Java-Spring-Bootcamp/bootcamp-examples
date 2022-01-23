@@ -8,8 +8,10 @@ import com.patika.bootcamp.patikabootcamp.repository.matching.MatchingEntity;
 import com.patika.bootcamp.patikabootcamp.repository.matching.MatchingJpaRepository;
 import com.patika.bootcamp.patikabootcamp.repository.movie.MovieEntity;
 import com.patika.bootcamp.patikabootcamp.repository.movie.MovieJpaRepository;
+import com.patika.bootcamp.patikabootcamp.service.movie.Movie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
@@ -32,6 +34,9 @@ class MovieControllerTest extends BaseIntegrationTest {
 
     @Autowired
     MatchingJpaRepository matchingJpaRepository;
+
+    @Autowired
+    RedisTemplate<String, Movie> movieRedisTemplate;
 
     @Test
     @Sql(scripts = "/actor-create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -67,6 +72,8 @@ class MovieControllerTest extends BaseIntegrationTest {
         Optional<MovieEntity> movie = movieJpaRepository.findById(response.getBody().getId());
         assertThat(movie).isPresent();
         assertThat(movie.get().getName()).isEqualTo("test movie name");
+        assertThat(movie.get().getCreatedDate()).isNotNull();
+
         //todo validate other movie fields
 
         //validate actor
@@ -106,5 +113,27 @@ class MovieControllerTest extends BaseIntegrationTest {
                         tuple(2001L, "test actor 2001", LocalDateTime.of(2001, 1, 12, 11, 0, 0)),
                         tuple(2003L, "test actor 2003", LocalDateTime.of(2003, 1, 12, 13, 0, 0))
                 );
+
+        //validate-cache
+        Movie movie = movieRedisTemplate.opsForValue().get("patika:movie:" + 1001);
+        assertThat(movie).isNotNull();
+        assertThat(movie.getName()).isEqualTo("test film 1001");
+        //todo validate other fields
+    }
+
+    @Test
+    @Sql(scripts = "/movie-create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void should_delete_movie() {
+        //given
+        Optional<MovieEntity> optionalMovie = movieJpaRepository.findById(1001L);
+        assertThat(optionalMovie).isPresent();
+
+        //when
+        testRestTemplate.delete("/movies/1001");
+
+        //then
+        optionalMovie = movieJpaRepository.findById(1001L);
+        assertThat(optionalMovie).isEmpty();
     }
 }

@@ -9,4 +9,6 @@ public interface MovieService {
     Long create(Movie movie, List<Actor> actors, List<Long> actorIds);
 
     Movie retrieve(Long id);
+
+    void delete(Long id);
 }

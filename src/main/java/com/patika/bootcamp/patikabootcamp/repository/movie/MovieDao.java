@@ -9,4 +9,6 @@ public interface MovieDao {
     MovieEntity retrieve(Long id);
 
     List<MovieEntity> retrieveByActorId(Long actorId);
+
+    void delete(Long id);
 }

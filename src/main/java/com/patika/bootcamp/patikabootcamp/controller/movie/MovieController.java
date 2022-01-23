@@ -34,4 +34,10 @@ public class MovieController {
         List<Actor> actors = actorService.retrieveActors(id);
         return MovieResponse.convertFrom(movie, actors);
     }
+
+    @DeleteMapping("/movies/{movieId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long movieId) {
+        movieService.delete(movieId);
+    }
 }

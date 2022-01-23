@@ -9,10 +9,12 @@ import com.patika.bootcamp.patikabootcamp.repository.movie.MovieEntity;
 import com.patika.bootcamp.patikabootcamp.service.actor.Actor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +27,7 @@ public class MovieServiceImpl implements MovieService {
     private final MovieDao movieDao;
     private final ActorDao actorDao;
     private final MatchingDao matchingDao;
+    private final RedisTemplate<String, Movie> movieRedisTemplate;
 
     @Override
     @Transactional
@@ -93,7 +96,21 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie retrieve(Long id) {
-        MovieEntity entity = movieDao.retrieve(id);
-        return Movie.convertFrom(entity);
+        Movie movie = movieRedisTemplate.opsForValue().get("patika:movie:" + id);
+        log.info("Movie is retrieving: {}", id);
+
+        if(movie == null) {
+            log.info("Movie cache is updating: {}", id);
+            MovieEntity entity = movieDao.retrieve(id);
+            movie = Movie.convertFrom(entity);
+            movieRedisTemplate.opsForValue().set("patika:movie:" + id, movie, Duration.ofSeconds(30));
+        }
+
+        return movie;
+    }
+
+    @Override
+    public void delete(Long id) {
+        movieDao.delete(id);
     }
 }

@@ -38,10 +38,13 @@ public class RedisConfig {
     @Bean("actorRedisTemplate")
     public RedisTemplate<String, Actor> actorRedisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, Actor> template = new RedisTemplate<>();
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         template.setConnectionFactory(lettuceConnectionFactory);
         return template;
     }
 
+    /*
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
         return RedisCacheConfiguration.defaultCacheConfig()
@@ -49,4 +52,6 @@ public class RedisConfig {
                 .disableCachingNullValues()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
+
+     */
 }

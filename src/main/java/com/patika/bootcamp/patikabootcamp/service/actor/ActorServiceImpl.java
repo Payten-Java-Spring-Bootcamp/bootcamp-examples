@@ -33,7 +33,7 @@ public class ActorServiceImpl implements ActorService {
         return movieDao.retrieveByActorId(actorId)
                 .stream()
                 .map(Movie::convertFrom)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

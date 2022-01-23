@@ -5,6 +5,7 @@ import com.patika.bootcamp.patikabootcamp.repository.movie.MovieEntity;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class Movie implements Serializable {
 
+    private Long id;
     private String name;
     private MovieGenre genre;
     private Integer releaseYear;
@@ -29,6 +31,7 @@ public class Movie implements Serializable {
 
     public static Movie convertFrom(MovieEntity entity) {
         return Movie.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .genre(entity.getGenre())
                 .releaseYear(entity.getReleaseYear())

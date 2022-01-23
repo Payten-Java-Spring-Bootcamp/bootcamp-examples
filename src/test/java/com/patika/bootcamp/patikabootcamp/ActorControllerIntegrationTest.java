@@ -2,6 +2,7 @@ package com.patika.bootcamp.patikabootcamp;
 
 import com.patika.bootcamp.patikabootcamp.controller.actor.ActorCreateRequest;
 import com.patika.bootcamp.patikabootcamp.controller.actor.ActorCreateResponse;
+import com.patika.bootcamp.patikabootcamp.controller.movie.MovieResponse;
 import com.patika.bootcamp.patikabootcamp.repository.actor.ActorEntity;
 import com.patika.bootcamp.patikabootcamp.repository.actor.ActorJpaRepository;
 import org.junit.jupiter.api.*;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,5 +62,21 @@ class ActorControllerIntegrationTest extends BaseIntegrationTest {
         assertThat(actorEntity).isPresent();
         assertThat(actorEntity.get()).extracting("name", "birthDate")
                 .containsExactly("test actor", LocalDateTime.of(1990, 1, 12, 13, 0, 0));
+    }
+
+    @Test
+    @Sql(scripts = "/movie-create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void should_retrieve_actor_movies() {
+        //when
+        ResponseEntity<MovieResponse[]> response = testRestTemplate.getForEntity("/actors/2001/movies", MovieResponse[].class);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(Arrays.stream(response.getBody()).toList())
+                .hasSize(2)
+                .extracting("id")
+                .containsExactly(1001L, 1002L);
     }
 }

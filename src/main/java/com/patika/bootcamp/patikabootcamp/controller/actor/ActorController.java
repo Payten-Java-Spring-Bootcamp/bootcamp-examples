@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +27,6 @@ public class ActorController {
         return actorService.retrieveMovies(actorId)
                 .stream()
                 .map(MovieResponse::convertFrom)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
