@@ -1,14 +1,31 @@
 package com.patika.bootcamp.patikabootcamp.domain.actor;
 
 import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
+import com.patika.bootcamp.patikabootcamp.domain.port.ActorPersistencePort;
+import com.patika.bootcamp.patikabootcamp.domain.port.MatchingPersistencePort;
+import com.patika.bootcamp.patikabootcamp.domain.port.MoviePersistencePort;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface ActorService {
+@Service
+@RequiredArgsConstructor
+public class ActorService {
 
-    Long create(Actor actor);
+    private final ActorPersistencePort actorPersistencePort;
+    private final MoviePersistencePort moviePersistencePort;
+    private final MatchingPersistencePort matchingPersistencePort;
 
-    List<Movie> retrieveMovies(Long actor);
+    public Long create(Actor actor) {
+        return actorPersistencePort.create(actor);
+    }
 
-    List<Actor> retrieveActors(Long movieId);
+    public List<Movie> retrieveMovies(Long actorId) {
+        return moviePersistencePort.retrieveByActorId(actorId);
+    }
+
+    public List<Actor> retrieveActors(Long movieId) {
+        return matchingPersistencePort.retrieveActorsByMovieId(movieId);
+    }
 }

@@ -1,7 +1,5 @@
 package com.patika.bootcamp.patikabootcamp.domain.rate;
 
-import com.patika.bootcamp.patikabootcamp.adapter.jpa.movie.MovieEntity;
-import com.patika.bootcamp.patikabootcamp.adapter.jpa.rate.RateEntity;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,22 +15,4 @@ public class Rate {
     private Long memberId;
     private Long movieId;
     private Integer point;
-
-    public RateEntity convertToRateEntity(MovieEntity movieEntity) {
-        RateEntity entity = new RateEntity();
-        entity.setCreatedDate(LocalDateTime.now());
-        entity.setMemberId(memberId);
-        entity.setMovie(movieEntity);
-        entity.setPoint(point);
-        return entity;
-    }
-
-    public static Rate convertFromRateEntity(RateEntity entity) {
-        return Rate.builder()
-                .createdDate(entity.getCreatedDate())
-                .memberId(entity.getMemberId())
-                .movieId(entity.getMovie().getId())
-                .point(entity.getPoint())
-                .build();
-    }
 }
