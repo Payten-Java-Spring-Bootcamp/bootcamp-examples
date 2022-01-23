@@ -1,10 +1,10 @@
 package com.patika.bootcamp.patikabootcamp;
 
-import com.patika.bootcamp.patikabootcamp.controller.actor.ActorCreateRequest;
-import com.patika.bootcamp.patikabootcamp.controller.actor.ActorCreateResponse;
-import com.patika.bootcamp.patikabootcamp.controller.movie.MovieResponse;
-import com.patika.bootcamp.patikabootcamp.repository.actor.ActorEntity;
-import com.patika.bootcamp.patikabootcamp.repository.actor.ActorJpaRepository;
+import com.patika.bootcamp.patikabootcamp.adapter.rest.actor.ActorCreateRequest;
+import com.patika.bootcamp.patikabootcamp.adapter.rest.actor.ActorCreateResponse;
+import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieResponse;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorEntity;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorJpaRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,14 +1,18 @@
 package com.patika.bootcamp.patikabootcamp.controller.movie;
 
 import com.patika.bootcamp.patikabootcamp.BaseIntegrationTest;
-import com.patika.bootcamp.patikabootcamp.controller.actor.ActorCreateRequest;
-import com.patika.bootcamp.patikabootcamp.repository.actor.ActorEntity;
-import com.patika.bootcamp.patikabootcamp.repository.actor.ActorJpaRepository;
-import com.patika.bootcamp.patikabootcamp.repository.matching.MatchingEntity;
-import com.patika.bootcamp.patikabootcamp.repository.matching.MatchingJpaRepository;
-import com.patika.bootcamp.patikabootcamp.repository.movie.MovieEntity;
-import com.patika.bootcamp.patikabootcamp.repository.movie.MovieJpaRepository;
-import com.patika.bootcamp.patikabootcamp.service.movie.Movie;
+import com.patika.bootcamp.patikabootcamp.adapter.rest.actor.ActorCreateRequest;
+import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieCreateResponse;
+import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieGenre;
+import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieRequest;
+import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieResponse;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorEntity;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorJpaRepository;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.matching.MatchingEntity;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.matching.MatchingJpaRepository;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.movie.MovieEntity;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.movie.MovieJpaRepository;
+import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,7 +26,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MovieControllerTest extends BaseIntegrationTest {
 
