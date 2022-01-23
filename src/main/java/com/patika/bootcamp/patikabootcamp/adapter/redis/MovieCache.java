@@ -1,6 +1,6 @@
 package com.patika.bootcamp.patikabootcamp.adapter.redis;
 
-import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieGenre;
+import com.patika.bootcamp.patikabootcamp.domain.movie.MovieGenre;
 import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
 import lombok.*;
 

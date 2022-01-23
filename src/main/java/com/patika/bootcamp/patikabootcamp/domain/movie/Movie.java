@@ -1,6 +1,5 @@
 package com.patika.bootcamp.patikabootcamp.domain.movie;
 
-import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieGenre;
 import lombok.*;
 
 @Getter

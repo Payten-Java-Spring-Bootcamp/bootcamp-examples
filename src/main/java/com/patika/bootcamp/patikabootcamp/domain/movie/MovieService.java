@@ -49,7 +49,7 @@ public class MovieService {
             List<Actor> retrievedActors = actorPersistencePort.retrieve(actorIds);
 
             if (retrievedActors.size() < actorIds.size()) {
-                throw new RuntimeException("Verilen actor id db'de bulunamamıştır");
+                throw new RuntimeException("Verilen actor id db'de bulunamamıştır"); //todo unit test for exception
             }
 
             return retrievedActors;

@@ -18,11 +18,15 @@ public class MatchingJpaAdapter implements MatchingPersistencePort {
 
     @Override
     public void create(Movie movie, List<Actor> actors) {
+        MovieEntity movieEntity = MovieEntity.from(movie);
+
         List<MatchingEntity> matchingEntities = actors.stream()
-                .map(actorEntity -> {
+                .map(actor -> {
+                    ActorEntity actorEntity = ActorEntity.from(actor);
+
                     MatchingEntity matchingEntity = new MatchingEntity();
-                    matchingEntity.setMovie(MovieEntity.from(movie));
-                    matchingEntity.setActor(ActorEntity.from(actorEntity));
+                    matchingEntity.setMovie(movieEntity);
+                    matchingEntity.setActor(actorEntity);
                     return matchingEntity;
                 }).toList();
 

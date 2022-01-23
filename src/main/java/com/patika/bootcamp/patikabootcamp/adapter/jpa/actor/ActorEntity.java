@@ -30,6 +30,7 @@ public class ActorEntity {
 
     public static ActorEntity from(Actor actor) {
         ActorEntity entity = new ActorEntity();
+        entity.setId(actor.getId());
         entity.setName(actor.getName());
         entity.setBirthDate(actor.getBirthDate());
         return entity;

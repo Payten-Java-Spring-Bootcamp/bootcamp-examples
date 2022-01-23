@@ -1,4 +1,4 @@
-package com.patika.bootcamp.patikabootcamp.adapter.rest.movie;
+package com.patika.bootcamp.patikabootcamp.domain.movie;
 
 public enum MovieGenre {
     ACTION,

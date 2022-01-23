@@ -1,9 +1,10 @@
 package com.patika.bootcamp.patikabootcamp.controller.movie;
 
 import com.patika.bootcamp.patikabootcamp.BaseIntegrationTest;
+import com.patika.bootcamp.patikabootcamp.adapter.redis.MovieCache;
 import com.patika.bootcamp.patikabootcamp.adapter.rest.actor.ActorCreateRequest;
 import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieCreateResponse;
-import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieGenre;
+import com.patika.bootcamp.patikabootcamp.domain.movie.MovieGenre;
 import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieRequest;
 import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieResponse;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorEntity;
@@ -12,7 +13,6 @@ import com.patika.bootcamp.patikabootcamp.adapter.jpa.matching.MatchingEntity;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.matching.MatchingJpaRepository;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.movie.MovieEntity;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.movie.MovieJpaRepository;
-import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,7 +39,7 @@ class MovieControllerTest extends BaseIntegrationTest {
     MatchingJpaRepository matchingJpaRepository;
 
     @Autowired
-    RedisTemplate<String, Movie> movieRedisTemplate;
+    RedisTemplate<String, MovieCache> movieRedisTemplate;
 
     @Test
     @Sql(scripts = "/actor-create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -118,7 +118,7 @@ class MovieControllerTest extends BaseIntegrationTest {
                 );
 
         //validate-cache
-        Movie movie = movieRedisTemplate.opsForValue().get("patika:movie:" + 1001);
+        MovieCache movie = movieRedisTemplate.opsForValue().get("patika:movie:" + 1001);
         assertThat(movie).isNotNull();
         assertThat(movie.getName()).isEqualTo("test film 1001");
         //todo validate other fields

@@ -2,7 +2,7 @@ package com.patika.bootcamp.patikabootcamp.adapter.jpa.movie;
 
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorEntity;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.matching.MatchingEntity;
-import com.patika.bootcamp.patikabootcamp.adapter.repository.Status;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.common.Status;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorJpaRepository;
 import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
 import com.patika.bootcamp.patikabootcamp.domain.port.MoviePersistencePort;

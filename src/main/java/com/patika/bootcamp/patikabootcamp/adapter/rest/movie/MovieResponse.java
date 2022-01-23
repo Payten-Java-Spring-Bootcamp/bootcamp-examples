@@ -3,6 +3,7 @@ package com.patika.bootcamp.patikabootcamp.adapter.rest.movie;
 import com.patika.bootcamp.patikabootcamp.adapter.rest.actor.ActorResponse;
 import com.patika.bootcamp.patikabootcamp.domain.actor.Actor;
 import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
+import com.patika.bootcamp.patikabootcamp.domain.movie.MovieGenre;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

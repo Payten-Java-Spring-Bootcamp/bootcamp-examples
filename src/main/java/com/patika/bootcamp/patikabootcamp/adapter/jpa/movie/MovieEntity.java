@@ -1,8 +1,8 @@
 package com.patika.bootcamp.patikabootcamp.adapter.jpa.movie;
 
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.rate.RateEntity;
-import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieGenre;
-import com.patika.bootcamp.patikabootcamp.adapter.repository.Status;
+import com.patika.bootcamp.patikabootcamp.domain.movie.MovieGenre;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.common.Status;
 import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +28,7 @@ public class MovieEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status = Status.ACTIVE;
+    private Status status;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -49,14 +49,22 @@ public class MovieEntity {
 
     public static MovieEntity from(Movie movie) {
         MovieEntity entity = new MovieEntity();
-        //todo
+        entity.setId(movie.getId());
+        entity.setStatus(Status.ACTIVE);
+        entity.setName(movie.getName());
+        entity.setGenre(movie.getGenre());
+        entity.setReleaseYear(movie.getReleaseYear());
+        entity.setDirector(movie.getDirector());
         return entity;
     }
 
     public Movie toModel() {
         return Movie.builder()
                 .id(id)
-                //todo map other fields
+                .name(name)
+                .genre(genre)
+                .releaseYear(releaseYear)
+                .director(director)
                 .build();
     }
 }
