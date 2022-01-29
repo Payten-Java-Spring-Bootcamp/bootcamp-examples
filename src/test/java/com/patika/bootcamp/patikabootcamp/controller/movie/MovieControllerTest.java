@@ -17,8 +17,7 @@ import com.patika.bootcamp.patikabootcamp.adapter.jpa.movie.MovieJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
@@ -64,8 +63,11 @@ class MovieControllerTest extends BaseIntegrationTest {
         request.setActors(List.of(actorCreateRequest1, actorCreateRequest2));
         request.setActorIds(List.of(1001L, 1002L, 1003L));
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, BEARER_TOKEN);
+
         //when
-        ResponseEntity<MovieCreateResponse> response = testRestTemplate.postForEntity("/movies", request, MovieCreateResponse.class);
+        ResponseEntity<MovieCreateResponse> response = testRestTemplate.exchange("/movies", HttpMethod.POST, new HttpEntity<>(request, httpHeaders), MovieCreateResponse.class);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -99,8 +101,11 @@ class MovieControllerTest extends BaseIntegrationTest {
     @Sql(scripts = "/movie-create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void should_retrieve_movie() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, BEARER_TOKEN);
+
         //when
-        ResponseEntity<MovieResponse> response = testRestTemplate.getForEntity("/movies/1001", MovieResponse.class);
+        ResponseEntity<MovieResponse> response = testRestTemplate.exchange("/movies/1001", HttpMethod.GET, new HttpEntity<>(httpHeaders), MovieResponse.class);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -127,8 +132,11 @@ class MovieControllerTest extends BaseIntegrationTest {
 
     @Test
     void should_NOT_retrieve_movie() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, BEARER_TOKEN);
+
         //when
-        ResponseEntity<ExceptionResponse> response = testRestTemplate.getForEntity("/movies/99", ExceptionResponse.class);
+        ResponseEntity<ExceptionResponse> response = testRestTemplate.exchange("/movies/99", HttpMethod.GET, new HttpEntity<>(httpHeaders), ExceptionResponse.class);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -147,8 +155,11 @@ class MovieControllerTest extends BaseIntegrationTest {
         Optional<MovieEntity> optionalMovie = movieJpaRepository.findById(1001L);
         assertThat(optionalMovie).isPresent();
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, BEARER_TOKEN);
+
         //when
-        testRestTemplate.delete("/movies/1001");
+        testRestTemplate.exchange("/movies/1001", HttpMethod.DELETE, new HttpEntity<>(httpHeaders), Void.class);
 
         //then
         optionalMovie = movieJpaRepository.findById(1001L);

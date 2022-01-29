@@ -7,8 +7,7 @@ import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorEntity;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorJpaRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
@@ -50,8 +49,11 @@ class ActorControllerIntegrationTest extends BaseIntegrationTest {
         request.setName("test actor");
         request.setBirthDate(LocalDateTime.of(1990, 1, 12, 13, 0, 0)); //yükselenini hesaplamayacaksak saate gerek yok
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, BEARER_TOKEN);
+
         //when
-        ResponseEntity<ActorCreateResponse> response = testRestTemplate.postForEntity("/actors", request, ActorCreateResponse.class);
+        ResponseEntity<ActorCreateResponse> response = testRestTemplate.exchange("/actors", HttpMethod.POST, new HttpEntity<>(request, httpHeaders), ActorCreateResponse.class);
 
         //when
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -69,7 +71,10 @@ class ActorControllerIntegrationTest extends BaseIntegrationTest {
     @Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void should_retrieve_actor_movies() {
         //when
-        ResponseEntity<MovieResponse[]> response = testRestTemplate.getForEntity("/actors/2001/movies", MovieResponse[].class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, BEARER_TOKEN);
+
+        ResponseEntity<MovieResponse[]> response = testRestTemplate.exchange("/actors/2001/movies", HttpMethod.GET, new HttpEntity<>(httpHeaders), MovieResponse[].class);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
