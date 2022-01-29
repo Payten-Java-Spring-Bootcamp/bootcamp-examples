@@ -1,6 +1,8 @@
 package com.patika.bootcamp.patikabootcamp.domain.movie;
 
 import com.patika.bootcamp.patikabootcamp.domain.actor.Actor;
+import com.patika.bootcamp.patikabootcamp.domain.exception.ExceptionType;
+import com.patika.bootcamp.patikabootcamp.domain.exception.PatikaValidationException;
 import com.patika.bootcamp.patikabootcamp.domain.port.ActorPersistencePort;
 import com.patika.bootcamp.patikabootcamp.domain.port.MatchingPersistencePort;
 import com.patika.bootcamp.patikabootcamp.domain.port.MovieCachePort;
@@ -49,7 +51,8 @@ public class MovieService {
             List<Actor> retrievedActors = actorPersistencePort.retrieve(actorIds);
 
             if (retrievedActors.size() < actorIds.size()) {
-                throw new RuntimeException("Verilen actor id db'de bulunamamıştır"); //todo unit test for exception
+                String detail = "Verilen actor id db'de bulunamamıştır. Beklenen:" + actorIds + ", bulunan:" + retrievedActors;
+                throw new PatikaValidationException(ExceptionType.COLLECTION_SIZE_EXCEPTION, detail);
             }
 
             return retrievedActors;

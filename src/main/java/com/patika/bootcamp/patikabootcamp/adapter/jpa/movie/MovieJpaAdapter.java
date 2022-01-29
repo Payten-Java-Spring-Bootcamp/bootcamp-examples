@@ -1,9 +1,11 @@
 package com.patika.bootcamp.patikabootcamp.adapter.jpa.movie;
 
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorEntity;
-import com.patika.bootcamp.patikabootcamp.adapter.jpa.matching.MatchingEntity;
-import com.patika.bootcamp.patikabootcamp.adapter.jpa.common.Status;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorJpaRepository;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.common.Status;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.matching.MatchingEntity;
+import com.patika.bootcamp.patikabootcamp.domain.exception.ExceptionType;
+import com.patika.bootcamp.patikabootcamp.domain.exception.PatikaDataNotFoundException;
 import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
 import com.patika.bootcamp.patikabootcamp.domain.port.MoviePersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ public class MovieJpaAdapter implements MoviePersistencePort {
         if (movieEntityOptional.isPresent())
             return movieEntityOptional.get().toModel();
         else
-            throw new RuntimeException();
+            throw new PatikaDataNotFoundException(ExceptionType.MOVIE_DATA_NOT_FOUND, "Movie id:" + id);
     }
 
     @Override
@@ -47,14 +49,14 @@ public class MovieJpaAdapter implements MoviePersistencePort {
                     .map(MovieEntity::toModel)
                     .toList();
         else
-            throw new RuntimeException();
+            throw new PatikaDataNotFoundException(ExceptionType.ACTOR_DATA_NOT_FOUND);
     }
 
     @Override
     public void delete(Long id) {
         Optional<MovieEntity> optionalMovieEntity = movieJpaRepository.findById(id);
 
-        if(optionalMovieEntity.isPresent()) {
+        if (optionalMovieEntity.isPresent()) {
             MovieEntity entity = optionalMovieEntity.get();
             entity.setStatus(Status.DELETED);
             movieJpaRepository.save(entity);

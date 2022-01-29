@@ -1,5 +1,7 @@
 package com.patika.bootcamp.patikabootcamp.domain.movie;
 
+import com.patika.bootcamp.patikabootcamp.domain.actor.Actor;
+import com.patika.bootcamp.patikabootcamp.domain.exception.PatikaValidationException;
 import com.patika.bootcamp.patikabootcamp.domain.port.ActorPersistencePort;
 import com.patika.bootcamp.patikabootcamp.domain.port.MatchingPersistencePort;
 import com.patika.bootcamp.patikabootcamp.domain.port.MovieCachePort;
@@ -10,7 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -86,5 +92,47 @@ class MovieServiceTestWithMock {
         assertThat(movie.getId()).isEqualTo(1L);
         assertThat(movie.getDirector()).isEqualTo("test director");
         assertThat(movie.getReleaseYear()).isEqualTo(2000);
+    }
+
+    @Test
+    void should_create() {
+        //given
+        List<Actor> actors = new ArrayList<>();
+        List<Long> actorIds = new ArrayList<>();
+
+        Movie movie = Movie.builder().build();
+
+        //mock
+        Movie createdMovie = Movie.builder().id(3L).build();
+        when(moviePersistencePort.save(any())).thenReturn(createdMovie);
+
+        //when
+        Long createdMovieId = movieService.create(movie, actors, actorIds);
+
+        //then
+        assertThat(createdMovieId).isEqualTo(3);
+
+        verify(matchingPersistencePort, times(1)).create(any(), any());
+    }
+
+    @Test
+    void should_NOT_create_when_given_actors_not_exist_in_db() {
+        //given
+        List<Actor> actors = new ArrayList<>();
+        List<Long> actorIds = List.of(1L, 2L);
+
+        Movie movie = Movie.builder().build();
+
+        //mock
+        when(actorPersistencePort.retrieve(any())).thenReturn(List.of(Actor.builder().build()));
+
+        //when
+        Throwable throwable = catchThrowable(() -> movieService.create(movie, actors, actorIds));
+
+        //then
+        assertThat(throwable)
+                .isNotNull()
+                .isInstanceOf(PatikaValidationException.class)
+                .hasMessage("Liste boyutları uyuşmuyor");
     }
 }

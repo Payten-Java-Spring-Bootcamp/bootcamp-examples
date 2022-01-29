@@ -3,6 +3,7 @@ package com.patika.bootcamp.patikabootcamp.controller.movie;
 import com.patika.bootcamp.patikabootcamp.BaseIntegrationTest;
 import com.patika.bootcamp.patikabootcamp.adapter.redis.MovieCache;
 import com.patika.bootcamp.patikabootcamp.adapter.rest.actor.ActorCreateRequest;
+import com.patika.bootcamp.patikabootcamp.adapter.rest.common.ExceptionResponse;
 import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieCreateResponse;
 import com.patika.bootcamp.patikabootcamp.domain.movie.MovieGenre;
 import com.patika.bootcamp.patikabootcamp.adapter.rest.movie.MovieRequest;
@@ -122,6 +123,20 @@ class MovieControllerTest extends BaseIntegrationTest {
         assertThat(movie).isNotNull();
         assertThat(movie.getName()).isEqualTo("test film 1001");
         //todo validate other fields
+    }
+
+    @Test
+    void should_NOT_retrieve_movie() {
+        //when
+        ResponseEntity<ExceptionResponse> response = testRestTemplate.getForEntity("/movies/99", ExceptionResponse.class);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(response.getBody()).isNotNull();
+
+        assertThat(response.getBody())
+                .extracting("code", "message", "detail")
+                .containsExactly(1001, "Film bulunamadı", "Movie id:99");
     }
 
     @Test
