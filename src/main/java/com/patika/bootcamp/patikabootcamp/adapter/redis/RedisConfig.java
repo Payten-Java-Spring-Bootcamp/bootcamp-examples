@@ -1,7 +1,7 @@
 package com.patika.bootcamp.patikabootcamp.adapter.redis;
 
 import com.patika.bootcamp.patikabootcamp.domain.actor.Actor;
-import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -11,13 +11,16 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
+@RequiredArgsConstructor
 public class RedisConfig {
+
+    private final RedisProperties redisProperties;
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName("localhost"); //todo configuration properties
-        redisStandaloneConfiguration.setPort(6379);
+        redisStandaloneConfiguration.setHostName(redisProperties.getHost());
+        redisStandaloneConfiguration.setPort(redisProperties.getPort());
 
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }

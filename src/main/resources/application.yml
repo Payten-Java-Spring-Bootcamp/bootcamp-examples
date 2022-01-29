@@ -9,3 +9,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
+
+redis:
+  host: localhost
+  port: 6379
+  #connection:
+    #host: localhost
+    #port: 6379
