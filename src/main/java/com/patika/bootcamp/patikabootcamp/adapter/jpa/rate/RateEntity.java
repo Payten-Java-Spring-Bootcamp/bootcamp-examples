@@ -1,5 +1,6 @@
 package com.patika.bootcamp.patikabootcamp.adapter.jpa.rate;
 
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.common.BaseEntity;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.movie.MovieEntity;
 import com.patika.bootcamp.patikabootcamp.domain.rate.Rate;
 import lombok.Getter;
@@ -12,14 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity(name = "rateEntity")
 @Table(name = "rate")
-public class RateEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private LocalDateTime createdDate;
+public class RateEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Long memberId;

@@ -1,9 +1,11 @@
 package com.patika.bootcamp.patikabootcamp.adapter.jpa.actor;
 
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.common.BaseEntity;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.matching.MatchingEntity;
 import com.patika.bootcamp.patikabootcamp.domain.actor.Actor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,11 +15,7 @@ import java.util.List;
 @Setter
 @Entity(name = "actor")
 @Table(name = "actor")
-public class ActorEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ActorEntity extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
@@ -30,9 +28,9 @@ public class ActorEntity {
 
     public static ActorEntity from(Actor actor) {
         ActorEntity entity = new ActorEntity();
-        entity.setId(actor.getId());
-        entity.setName(actor.getName());
-        entity.setBirthDate(actor.getBirthDate());
+        entity.id = actor.getId();
+        entity.name = actor.getName();
+        entity.birthDate = actor.getBirthDate();
         return entity;
     }
 

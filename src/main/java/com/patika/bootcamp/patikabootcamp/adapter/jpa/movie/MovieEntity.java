@@ -1,17 +1,15 @@
 package com.patika.bootcamp.patikabootcamp.adapter.jpa.movie;
 
-import com.patika.bootcamp.patikabootcamp.adapter.jpa.rate.RateEntity;
-import com.patika.bootcamp.patikabootcamp.domain.movie.MovieGenre;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.common.BaseEntity;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.common.Status;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.rate.RateEntity;
 import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
+import com.patika.bootcamp.patikabootcamp.domain.movie.MovieGenre;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -19,19 +17,11 @@ import java.util.List;
 @Entity(name = "movie")
 @Table(name = "movie")
 @Where(clause = "status <> 'DELETED'")
-@EntityListeners(AuditingEntityListener.class)
-public class MovieEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class MovieEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
-
-    @CreatedDate
-    private LocalDateTime createdDate;
 
     @Column(nullable = false)
     private String name;
@@ -49,12 +39,12 @@ public class MovieEntity {
 
     public static MovieEntity from(Movie movie) {
         MovieEntity entity = new MovieEntity();
-        entity.setId(movie.getId());
-        entity.setStatus(Status.ACTIVE);
-        entity.setName(movie.getName());
-        entity.setGenre(movie.getGenre());
-        entity.setReleaseYear(movie.getReleaseYear());
-        entity.setDirector(movie.getDirector());
+        entity.id = movie.getId();
+        entity.status = Status.ACTIVE;
+        entity.name = movie.getName();
+        entity.genre = movie.getGenre();
+        entity.releaseYear = movie.getReleaseYear();
+        entity.director = movie.getDirector();
         return entity;
     }
 

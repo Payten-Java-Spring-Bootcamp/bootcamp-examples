@@ -1,6 +1,7 @@
 package com.patika.bootcamp.patikabootcamp.adapter.jpa.matching;
 
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.actor.ActorEntity;
+import com.patika.bootcamp.patikabootcamp.adapter.jpa.common.BaseEntity;
 import com.patika.bootcamp.patikabootcamp.adapter.jpa.movie.MovieEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,11 +12,7 @@ import javax.persistence.*;
 @Setter
 @Entity(name = "matching")
 @Table(name = "matching")
-public class MatchingEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class MatchingEntity extends BaseEntity {
 
     @ManyToOne
     private MovieEntity movie;
