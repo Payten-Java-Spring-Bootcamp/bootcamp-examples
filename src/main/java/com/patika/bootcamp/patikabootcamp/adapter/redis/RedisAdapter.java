@@ -4,9 +4,11 @@ import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
 import com.patika.bootcamp.patikabootcamp.domain.port.MovieCachePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.expression.spel.ast.OpAnd;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,13 +17,11 @@ public class RedisAdapter implements MovieCachePort {
     private final RedisTemplate<String, MovieCache> movieRedisTemplate;
 
     @Override
-    public Movie retrieveMovie(Long movieId) {//todo optional
+    public Optional<Movie> retrieveMovie(Long movieId) {//todo optional
         MovieCache movieCache = movieRedisTemplate.opsForValue().get("patika:movie:" + movieId);
 
-        if(movieCache == null)
-            return null;
-
-        return movieCache.toModel();
+        return Optional.ofNullable(movieCache)
+                .map(MovieCache::toModel);
     }
 
     @Override

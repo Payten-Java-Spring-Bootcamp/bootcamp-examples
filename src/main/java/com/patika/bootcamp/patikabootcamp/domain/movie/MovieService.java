@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j //todo log levels
 @Service
@@ -78,16 +79,17 @@ public class MovieService {
      */
 
     public Movie retrieve(Long id) {
-        Movie movie = movieCachePort.retrieveMovie(id);
+        Optional<Movie> movie = movieCachePort.retrieveMovie(id);
         log.info("Movie is retrieving: {}", id);
 
-        if(movie == null) {
+        if(movie.isEmpty()) {
             log.info("Movie cache is updating: {}", id);
-            movie = moviePersistencePort.retrieve(id);
-            movieCachePort.createMovie(movie);
+            Movie retrievedMovie = moviePersistencePort.retrieve(id);
+            movieCachePort.createMovie(retrievedMovie);
+            return retrievedMovie;
         }
 
-        return movie;
+        return movie.get();
     }
 
     public void delete(Long id) {

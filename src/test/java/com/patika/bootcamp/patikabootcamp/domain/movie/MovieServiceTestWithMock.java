@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -55,7 +56,7 @@ class MovieServiceTestWithMock {
                 .releaseYear(2000)
                 .build();
 
-        when(movieCachePort.retrieveMovie(1L)).thenReturn(mockMovie);
+        when(movieCachePort.retrieveMovie(1L)).thenReturn(Optional.ofNullable(mockMovie));
 
         //when
         Movie movie = movieService.retrieve(1L);
@@ -73,7 +74,7 @@ class MovieServiceTestWithMock {
     @Test
     void should_retrieve_movie_when_cache_empty() {
         //mock
-        when(movieCachePort.retrieveMovie(any())).thenReturn(null);
+        when(movieCachePort.retrieveMovie(any())).thenReturn(Optional.empty());
 
         Movie mockMovie = Movie.builder()
                 .id(1L)

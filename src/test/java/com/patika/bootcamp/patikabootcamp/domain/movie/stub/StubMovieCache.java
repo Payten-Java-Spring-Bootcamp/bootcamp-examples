@@ -2,23 +2,26 @@ package com.patika.bootcamp.patikabootcamp.domain.movie.stub;
 
 import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
 import com.patika.bootcamp.patikabootcamp.domain.port.MovieCachePort;
+import org.checkerframework.checker.nullness.Opt;
+
+import java.util.Optional;
 
 public class StubMovieCache implements MovieCachePort {
 
     public int interaction = 0;
 
     @Override
-    public Movie retrieveMovie(Long movieId) {
+    public Optional<Movie> retrieveMovie(Long movieId) {
         interaction++;
 
         if (movieId == 1)
-            return Movie.builder()
+            return Optional.ofNullable(Movie.builder()
                     .id(1L)
                     .director("test director")
                     .releaseYear(2000)
-                    .build();
+                    .build());
 
-        return null;
+        return Optional.empty();
     }
 
     @Override

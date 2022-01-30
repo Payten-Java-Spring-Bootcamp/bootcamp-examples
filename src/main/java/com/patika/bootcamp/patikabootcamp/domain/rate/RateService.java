@@ -1,11 +1,14 @@
 package com.patika.bootcamp.patikabootcamp.domain.rate;
 
+import com.patika.bootcamp.patikabootcamp.domain.movie.Movie;
 import com.patika.bootcamp.patikabootcamp.domain.port.MoviePersistencePort;
 import com.patika.bootcamp.patikabootcamp.domain.port.RatePersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +16,36 @@ public class RateService {
 
     private final RatePersistencePort ratePersistencePort;
     private final MoviePersistencePort moviePersistencePort;
+
+
+    public Double findAvgRateByAnemicModel(Long movieId) {
+        List<Rate> rates = ratePersistencePort.retrieveByMovieId(movieId);
+
+        Integer sum = rates.stream()
+                .map(Rate::getPoint)
+                .reduce(0, Integer::sum);
+
+        return sum / (double) rates.size();
+    }
+
+    public Integer validRateCountV1(Long movieId) {
+        List<Rate> rates = ratePersistencePort.retrieveByMovieId(movieId)
+                .stream()
+                .filter(r -> r.getCreatedDate().isAfter(LocalDateTime.of(2022,1,1,0,0,0)))
+                .toList();
+
+        return rates.size();
+    }
+
+    public Integer validRateCountV2(Long movieId) {
+        Movie movie = moviePersistencePort.retrieve(movieId);
+        return movie.getValidRateCount();
+    }
+
+    public Double findAvgRateByRichModel(Long movieId) {
+        Movie movie = moviePersistencePort.retrieve(movieId);
+        return movie.calculateAvgRate();
+    }
 
     public void rateToMovie(Rate rate) {
         ratePersistencePort.rateToMovie(rate);
