@@ -82,7 +82,7 @@ public class MovieService {
         Optional<Movie> movie = movieCachePort.retrieveMovie(id);
         log.info("Movie is retrieving: {}", id);
 
-        if(movie.isEmpty()) {
+        if (movie.isEmpty()) {
             log.info("Movie cache is updating: {}", id);
             Movie retrievedMovie = moviePersistencePort.retrieve(id);
             movieCachePort.createMovie(retrievedMovie);

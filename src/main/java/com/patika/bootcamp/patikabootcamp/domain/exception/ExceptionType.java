@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ExceptionType {
 
-    GENERIC_EXCEPTION(1, "Bilinmeyen bir sorun oluştur"),
+    GENERIC_EXCEPTION(1, "Bilinmeyen bir sorun oluştu"),
 
     MOVIE_DATA_NOT_FOUND(1001, "Film bulunamadı"),
     ACTOR_DATA_NOT_FOUND(1002, "Oyuncu bulunamadı"),

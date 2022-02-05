@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,11 +17,13 @@ public class AccountEntity extends BaseEntity {
 
     private String mail;
     private String password;
+    private LocalDateTime lastActivationDate;
 
     public static AccountEntity from(Account account) {
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.password = account.getPassword();
         accountEntity.mail = account.getMail();
+        accountEntity.lastActivationDate = account.getLastActivationDate();
         return accountEntity;
     }
 
